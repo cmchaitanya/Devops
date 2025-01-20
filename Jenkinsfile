@@ -1,21 +1,21 @@
 pipeline {
-  agent none
-  stages {
-    stage('Back-end') {
-      agent {
-        docker { image 'maven:3.8.1-adoptopenjdk-11' }
-      }
-      steps {
-        sh 'mvn --version'
-      }
+    agent any
+    stages {
+        stage('Setup Node.js') {
+            steps {
+                // Ensure Node.js is installed
+                sh 'node -v'
+                echo 'Hello, World!'
+            }
+        }
+        stage('Print Hello World') {
+            steps {
+                // Create a simple Node.js script to print "Hello, World!"
+                writeFile file: 'hello.js', text: '''
+                    console.log("Hello, World!");
+                '''
+                sh 'node hello.js'
+            }
+        }
     }
-    stage('Front-end') {
-      agent {
-        docker { image 'node:16-alpine' }
-      }
-      steps {
-        sh 'node --version'
-      }
-    }
-  }
 }
